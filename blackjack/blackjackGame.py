@@ -6,6 +6,16 @@ from deck import Deck, Card
 
 # at some point i assume im going to have to make more objects for chips/betting i guess....
 
+# maybe i can like simulate an AI type situation for the game as an external player object
+# given a difficulty rating --> take the mathematically "ideal" move and give it a random chance to for the ai to "fumble"?
+# like the cpu will choose to hit anyways on a 18 or som on "accident"
+
+# this project i feel is being blown a lil outta proportion.....
+# man i gotta go back and delete these comments -- reminder*
+
+
+
+
 class BlackjackGame:
   def __init__(self, name='Player'):
     # initializes with the trash player and the two player objects, does both this class and initialized deck need to be here?
@@ -58,6 +68,7 @@ class BlackjackGame:
 
 
     # like surely i coud consolidate all of this and have it be like prelim check
+    # 
     if self.dealer.is_natural() and self.player.is_natural():
       print ("Tie!")
       return
@@ -70,10 +81,14 @@ class BlackjackGame:
       print( "Player has Blackjack, you won!")
       return
 
+
+
     # its yo turn
     print(f"\n{self.player.name}'s Turn\n")
     print (self.player.display_hand())
 
+
+    # logic behind hitting and standing ---> i guess this is fine??
     while not self.player.is_busted():
       print(self.dealer.display_hand())
     
@@ -95,7 +110,10 @@ class BlackjackGame:
         print(f"{self.player.name} will stand.\n")
         break
 
+
+
   def dealer_turn(self):
+    # time for u to lose :D
     print("Dealer's Turn\n")
     print(self.dealer.display_hand(show_all=True))
 
@@ -115,6 +133,9 @@ class BlackjackGame:
 
   
   def soft_sixteen_check(self):
+    # again with perchance questionable implementation, but i guess I could reuse this code at some point for the cpu thingie thingie 
+    # --> *update: ?? I mean when there is an ace present and I need to check to see if there is room to be able to draw another
+    # but like should i even or is there som better
     dealer_score = self.dealer.calculate_score()
 
     if dealer_score >= 17 and self.dealer.aces and self.dealer.is_dealer == True:
@@ -124,10 +145,14 @@ class BlackjackGame:
   
 
   def is_busted(self):
+    # genuinely i dont even know if this is even neccesary besidess formatting(?) i guess but shouldn't it have inherited this code from the Player object ?????
+    # honestly too afraid to try and test something and break it all
+    
     return self.player.calculate_score() > 21
     
 
   def determine_winner(self):
+    # i shoud write this
     ...
     
   def start_game(self):
