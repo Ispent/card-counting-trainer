@@ -1,0 +1,140 @@
+from player import Player
+from deck import Deck, Card
+# does da busted/natural object even need to be in player ??? --> should i move it over to here.....
+# if i do..... prolly incorporate both into win condition checking class
+# combine that with a prelimary tie/natural check ???
+
+# at some point i assume im going to have to make more objects for chips/betting i guess....
+
+class BlackjackGame:
+  def __init__(self, name='Player'):
+    # initializes with the trash player and the two player objects, does both this class and initialized deck need to be here?
+    self.trashPile = Deck()
+
+    self.player = Player(name)
+    self.dealer = Player("Dealer", is_dealer=True)
+
+  def __len__ (self):
+    # length
+    return len(self.deck)
+    
+
+  def initialize_deck(self, deckCount=1): # the name of this is like literally the same thing as below
+    # creates the deck that will be used during play
+    # do people even get to choose and/or should that even be a function of the program???
+    self.deck = Deck()
+    self.deck.create_deck(deckCount)
+    self.deck.shuffle()
+    return self.deck
+
+  def deal_initial(self): # see above comment on name redundancy lol (but they different)
+    # deals both the player and the dealer 2 cards, each going one card at a time
+    for card in range(2):
+      self.player.add_card(self.deck.peek())
+      self.deck.cards.pop(0)
+      self.dealer.add_card(self.deck.peek())
+      self.deck.cards.pop(0)
+
+  def deal(self, recepient):
+    # again the name is like super boring and potentially even redundant but like ugh
+    if len(self.deck.cards) == 0:
+      # just in case deck happens to run out mid game (should be impossible currently... ....... :(
+      print("The deck is empty. Adding more cards to the deck")
+      self.deck.create_deck()
+      # again with the high-key confusing ass class names
+        
+    card = self.deck.peek()
+    print(f"{recepient.name} has drawn {card}")
+    recepient.add_card(card)
+    self.deck.cards.pop(0)
+
+  def player_turn(self): # the first and every other consequent round !!
+    # if the dealer were to start with 21, automatically end game without progressing --> yes i must do this
+    # idk how this works rn that well too tired
+
+
+    self.dealer.calculate_score()
+    self.player.calculate_score()
+
+
+    # like surely i coud consolidate all of this and have it be like prelim check
+    if self.dealer.is_natural() and self.player.is_natural():
+      print ("Tie!")
+      return
+    
+    elif self.dealer.is_natural():
+      print( "Dealer has Blackjack, you lost" )
+      return
+    
+    elif self.player.is_natural():
+      print( "Player has Blackjack, you won!")
+      return
+
+    # its yo turn
+    print(f"\n{self.player.name}'s Turn\n")
+    print (self.player.display_hand())
+
+    while not self.player.is_busted():
+      print(self.dealer.display_hand())
+    
+      choice = input('\nWould you like to hit or stand (h/s): ').strip().lower()
+      while choice not in ('h', 's'):
+        choice = input("Invalid input. Enter 'h' or 's': ").strip().lower()
+
+
+      if choice == 'h':
+        self.deal(self.player)
+        print(self.player.display_hand())
+        self.player.calculate_score()
+
+        if self.player.is_busted():
+          print("You Busted")
+          return
+      
+      elif choice == 's':
+        print(f"{self.player.name} will stand.\n")
+        break
+
+  def dealer_turn(self):
+    print("Dealer's Turn\n")
+    print(self.dealer.display_hand(show_all=True))
+
+    while self.dealer.calculate_score() < 17:
+      self.deal(self.dealer)
+    
+
+    if self.dealer.is_busted():
+      print('\nDealer Busts, You win')
+      return
+
+    if self.dealer.calculate_score() == self.player.calculate_score():
+      print("tie!")
+      return
+    
+    print(self.dealer.display_hand(show_all=True))
+
+  
+  def soft_sixteen_check(self):
+    dealer_score = self.dealer.calculate_score()
+
+    if dealer_score >= 17 and self.dealer.aces and self.dealer.is_dealer == True:
+        dealer_score -= 10
+        self.dealer.aces -= 1
+    self.dealer.score = dealer_score
+  
+
+  def is_busted(self):
+    return self.player.calculate_score() > 21
+    
+
+  def determine_winner(self):
+    ...
+    
+  def start_game(self):
+    # start da game
+    self.deck = self.initialize_deck(int(input("How many decks would you like to use?: ")))
+    self.deal_initial()
+    self.player_turn()
+    if not self.player.is_busted():
+      self.dealer_turn()
+
