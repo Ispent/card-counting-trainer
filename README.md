@@ -4,6 +4,6 @@ Creating a blackjack-centric card counting trainer, ideally with support for mor
 
 -----------------
 
-# Dev Log
+### Dev Log
 1-30-2026
 Finished function to determine winner, but still need to write up unit tests and such
