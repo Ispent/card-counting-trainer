@@ -15,6 +15,10 @@ from deck import Deck, Card
 
 
 
+# wait am i thinking about this wrong
+# should this be not a game object but a singular "round" object that all goes within the bigger "game" object 
+
+
 
 class BlackjackGame:
   def __init__(self, name='Player'):
@@ -69,19 +73,9 @@ class BlackjackGame:
 
     # like surely i coud consolidate all of this and have it be like prelim check
     # 
-    if self.dealer.is_natural() and self.player.is_natural():
-      print ("Tie!")
-      return
-    
-    elif self.dealer.is_natural():
-      print( "Dealer has Blackjack, you lost" )
-      return
-    
-    elif self.player.is_natural():
-      print( "Player has Blackjack, you won!")
-      return
 
-
+    if self.check_immediate_win():
+      return
 
     # its yo turn
     print(f"\n{self.player.name}'s Turn\n")
@@ -102,8 +96,7 @@ class BlackjackGame:
         print(self.player.display_hand())
         self.player.calculate_score()
 
-        if self.player.is_busted():
-          print("You Busted")
+        if self.check_immediate_win():
           return
       
       elif choice == 's':
@@ -122,15 +115,11 @@ class BlackjackGame:
     
 
     if self.dealer.is_busted():
-      print('\nDealer Busts, You win')
-      return
+      print("Dealer Busts, You win!")
+      return 
 
-    if self.dealer.calculate_score() == self.player.calculate_score():
-      print("tie!")
-      return
+    self.final_winner_check()
     
-    print(self.dealer.display_hand(show_all=True))
-
   
   def soft_sixteen_check(self):
     # again with perchance questionable implementation, but i guess I could reuse this code at some point for the cpu thingie thingie 
@@ -147,13 +136,44 @@ class BlackjackGame:
   def is_busted(self):
     # genuinely i dont even know if this is even neccesary besidess formatting(?) i guess but shouldn't it have inherited this code from the Player object ?????
     # honestly too afraid to try and test something and break it all
-    
+
     return self.player.calculate_score() > 21
     
 
-  def determine_winner(self):
+  def check_immediate_win(self):
     # i shoud write this
-    ...
+
+    # prelim natural 21 check :D finally !!!
+    if self.dealer.is_natural() and self.player.is_natural():
+      print ("\nTie!")
+      return True
+
+    elif self.dealer.is_natural():
+      print( "\nDealer has Blackjack, you lost" )
+      return True
+    
+    elif self.player.is_natural():
+      print( "\nPlayer has Blackjack, you won!")
+      return True
+    
+    elif self.player.is_busted():
+      print( "\nYou Busted")
+      return True
+    
+    return False
+  
+  def final_winner_check(self):
+    player_score = self.player.calculate_score()
+    dealer_score = self.dealer.calculate_score()
+
+    if player_score > dealer_score:
+      print("\nPlayer wins!")
+    elif dealer_score > player_score:
+      print("\nDealer Wins!")
+    else:
+      print("\ntie!")
+
+    
     
   def start_game(self):
     # start da game
