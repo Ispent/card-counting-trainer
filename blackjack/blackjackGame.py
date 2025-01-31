@@ -175,10 +175,26 @@ class BlackjackGame:
       print("\ntie!")
 
     
+  def deck_input_check(self):
+    while True:
+      try:
+        deckCount = int(input("How many decks would you like to use?: "))
+        return deckCount
+      except ValueError:
+        print("Invalid input. Please enter an integer")
+      if isinstance(deckCount, int) and 20 > deckCount > 0:
+        break
+
+    return deckCount
     
   def start_game(self):
     # start da game
-    self.deck = self.initialize_deck(int(input("How many decks would you like to use?: ")))
+    deckCount = self.deck_input_check()
+    self.deck = self.initialize_deck(deckCount)
+
+    
+
+
     self.deal_initial()
     self.player_turn()
     if not self.player.is_busted():
