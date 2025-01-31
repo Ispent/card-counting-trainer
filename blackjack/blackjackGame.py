@@ -37,7 +37,7 @@ class BlackjackGame:
     # creates the deck that will be used during play
     # do people even get to choose and/or should that even be a function of the program???
     self.deck = Deck()
-    self.deck.create_deck(deckCount)
+    self.deck.add_deck(deckCount)
     self.deck.shuffle()
     return self.deck
 
@@ -54,7 +54,8 @@ class BlackjackGame:
     if len(self.deck.cards) == 0:
       # just in case deck happens to run out mid game (should be impossible currently... ....... :(
       print("The deck is empty. Adding more cards to the deck")
-      self.deck.create_deck()
+      self.deck.add_deck()
+      self.deck.shuffle()
       # again with the high-key confusing ass class names
         
     card = self.deck.peek()

@@ -15,7 +15,7 @@ class Deck:
   def __init__(self):
     self.cards = []
 
-  def create_deck(self, deckCount=1):
+  def add_deck(self, deckCount=1):
     # automatically populates the list with cards, with support for multiple decks
     # by default will contain 1 deck of 52 cards
     self.deckCount = deckCount
