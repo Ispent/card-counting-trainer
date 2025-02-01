@@ -134,11 +134,7 @@ class BlackjackGame:
     self.dealer.score = dealer_score
   
 
-  def is_busted(self):
-    # genuinely i dont even know if this is even neccesary besidess formatting(?) i guess but shouldn't it have inherited this code from the Player object ?????
-    # honestly too afraid to try and test something and break it all
 
-    return self.player.calculate_score() > 21
     
 
   def check_immediate_win(self):
@@ -191,12 +187,8 @@ class BlackjackGame:
     # start da game
     deckCount = self.deck_input_check()
     self.deck = self.initialize_deck(deckCount)
-
-    
-
-
     self.deal_initial()
     self.player_turn()
-    if not self.player.is_busted():
+    if not self.player.is_natural():
       self.dealer_turn()
 

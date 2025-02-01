@@ -41,7 +41,7 @@ class Player:
 
   def display_hand(self, show_all=False):
     # display the current hand, if you are a dealer and show_false is flagged as false, only show the first card --> else just show all
-    if show_all == False and self.is_dealer == True:
+    if not show_all and self.is_dealer:
       return f"Dealer's hand is a {self.hand[0]} and [Hidden Card]"
     
     if len(self.hand) > 1:

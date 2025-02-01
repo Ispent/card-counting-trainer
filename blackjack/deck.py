@@ -35,7 +35,11 @@ class Deck:
   def discard(self, amount=1): # logic so u cant remove more cards then the total 
     # discards specified amount of cards from the top of the deck 
     # by default will remove the first card
-    self.cards = self.cards[amount:]
+    if amount > len(self.cards):
+      print("Not enough cards to discard")
+      self.cards = []
+    else:
+      self.cards = self.cards[amount:]
 
   def shuffle(self):
     # uses random module to shuffle the list (deck)
@@ -43,6 +47,9 @@ class Deck:
   
   def peek(self, index=0): # add error handling (?)
     # returns the top card in the deck
+
+    if len(self.cards) == 0:
+      raise ValueError("Can not peek from an empty deck")
     return self.cards[index]
 
 
