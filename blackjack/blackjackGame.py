@@ -216,3 +216,8 @@ class BlackjackGame:
 
     self.end_round()
 
+
+
+if __name__ == "__main__":
+    game = BlackjackGame()
+    game.start_game()
