@@ -134,9 +134,6 @@ class BlackjackGame:
     self.dealer.score = dealer_score
   
 
-
-    
-
   def check_immediate_win(self):
     # i shoud write this
 
@@ -171,6 +168,30 @@ class BlackjackGame:
       print("\ntie!")
 
     
+  def end_round(self):
+    self.trashPile.cards.extend(self.player.hand)
+    self.trashPile.cards.extend(self.dealer.hand)
+
+    self.player.hand.clear()
+    self.dealer.hand.clear()
+
+    while True:
+      replay = input("Would you like to play again? (y/n): ")
+
+      if replay == 'y':
+        self.deal_initial()
+        self.player_turn()
+        if not self.player.is_natural():
+          self.dealer_turn()
+
+      
+      elif replay == "n":
+        exit()
+
+      else:
+        print("Invalid input please try again")
+
+
   def deck_input_check(self):
     while True:
       try:
@@ -189,6 +210,9 @@ class BlackjackGame:
     self.deck = self.initialize_deck(deckCount)
     self.deal_initial()
     self.player_turn()
+
     if not self.player.is_natural():
       self.dealer_turn()
+
+    self.end_round()
 
