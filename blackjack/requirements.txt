@@ -1,0 +1,10 @@
+
+
+- `Flask==2.1.1`: A lightweight WSGI web application framework.
+- `gunicorn==20.1.0`: A Python WSGI HTTP Server for UNIX.
+- `requests==2.27.1`: A simple, yet elegant HTTP library.
+- `Jinja2==3.1.2`: A templating engine for Python.
+- `Werkzeug==2.1.1`: A comprehensive WSGI web application library.
+- `itsdangerous==2.1.2`: A library to handle untrusted data safely.
+- `click==8.1.3`: A package for creating command-line interfaces.
+
