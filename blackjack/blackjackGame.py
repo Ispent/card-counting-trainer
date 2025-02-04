@@ -8,7 +8,7 @@ blackjack game
 wait this might be more broken than i had realized
 '''
 
-
+''' hopefully this is allowing for the code be the run from command line if thats even important at all becuase of my funky folder setup'''
 import os
 import sys
 
@@ -22,10 +22,16 @@ from deck import Deck, Card
 
 class BlackjackGame:
   def __init__(self, name='Player'):
-    '''uhhhh''' 
+    '''Class representing the gamestate of a round of blackjack(?)
+    
+    parameter:
+      name (str): name of the player
+      trashPile (Deck): Deck object used to keep track of discarded cards
+      player (player): player object representing the human player 
+      dealer (player): player object representing the dealer, with built in flag for the player class
+    ''' 
     # initializes with the trash player and the two player objects, does both this class and initialized deck need to be here?
     self.trashPile = Deck()
-
     self.player = Player(name)
     self.dealer = Player("Dealer", is_dealer=True)
 
@@ -34,16 +40,32 @@ class BlackjackGame:
     return len(self.deck)
     
 
-  def initialize_deck(self, deckCount=1): # the name of this is like literally the same thing as below
-    # creates the deck that will be used during play
-    # do people even get to choose and/or should that even be a function of the program???
+  def initialize_deck(self, deckCount=1):
+    '''
+    initializes the deck object by adding the cards and shuffling them
+
+    Args:
+      deckCount(int): keeps track of number of decks being used
+        - defaults to 1 deck, internally limited to 20 decks total
+
+    returns:
+      deck (Deck): Returns the shuffled deck 
+    '''
+    
     self.deck = Deck()
     self.deck.add_deck(deckCount)
     self.deck.shuffle()
     return self.deck
 
-  def deal_initial(self): # see above comment on name redundancy lol (but they different)
-    # deals both the player and the dealer 2 cards, each going one card at a time
+  def deal_initial(self): 
+    '''
+    acts as the start of every "round" and deals two cards each all players
+    '''
+    # logically flawed function lowkey no>??
+    # hard baked in two player lock
+    # maybe make like a loop so we can just deal 2 cards to every player
+    # at some point......
+
     for card in range(2):
       self.player.add_card(self.deck.peek())
       self.deck.cards.pop(0)
@@ -52,34 +74,44 @@ class BlackjackGame:
 
   def deal(self, recepient):
     # again the name is like super boring and potentially even redundant but like ugh
+    
+    # wait i just realized this deal function also doesnt really work allat well 
+      # make sure to fix the fact that my function to add more cards to the deck doesnt 
+      # actually take the cards from the discard pile but grabs a new deck instead
+    '''
+    deals one card to a specified recepient
+
+    Args:
+      recipient (Player): the player object that will receive the card
+    '''
+
     if len(self.deck.cards) == 0:
       # just in case deck happens to run out mid game (should be impossible currently... ....... :(
+      # fix this !!!!
       print("The deck is empty. Adding more cards to the deck")
       self.deck.add_deck()
       self.deck.shuffle()
-      # again with the high-key confusing ass class names
         
     card = self.deck.peek()
     print(f"{recepient.name} has drawn {card}")
     recepient.add_card(card)
     self.deck.cards.pop(0)
 
-  def player_turn(self): # the first and every other consequent round !!
-    # if the dealer were to start with 21, automatically end game without progressing --> yes i must do this
-    # idk how this works rn that well too tired
-
+  def player_turn(self): 
+    '''
+    manages the flow of the player's turn in a round
+      - Calculates player and dealer's score
+      - if either player acheives an automatic win, will appropirately end the game
+    
+    '''
 
     self.dealer.calculate_score()
     self.player.calculate_score()
 
-
-    # like surely i coud consolidate all of this and have it be like prelim check
-    # 
-
+    # like im 99% certain that this does not work as intended ---> im 99% certain i fixed it now
     if self.check_immediate_win():
       return
-
-    # its yo turn
+    
     print(f"\n{self.player.name}'s Turn\n")
     print (self.player.display_hand())
 
@@ -89,31 +121,33 @@ class BlackjackGame:
       print(self.dealer.display_hand())
     
       choice = input('\nWould you like to hit or stand (h/s): ').strip().lower()
-      while choice not in ('h', 's'):
-        choice = input("Invalid input. Enter 'h' or 's': ").strip().lower()
-
 
       if choice == 'h':
         self.deal(self.player)
-        print(self.player.display_hand())
         self.player.calculate_score()
-
         if self.check_immediate_win():
           return
-      
+        
       elif choice == 's':
-        print(f"{self.player.name} will stand.\n")
         break
+      else:
+        print("Invalid choice. Please enter 'h' to hit or 's' to stand.")
 
+      print(f"\n{self.player.name}'s turn is over.\n")
 
 
   def dealer_turn(self):
-    '''dealer object will draw cards until their score is a hard 17'''
+    '''
+    manages the flow of the dealer's turn
+      - dealer will keep drawing cards until they hit a score of hard 17 or bust 
+    '''
+
     print("Dealer's Turn\n")
     print(self.dealer.display_hand(show_all=True))
 
     while self.dealer.calculate_score() < 17:
       self.deal(self.dealer)
+      self.soft_sixteen_check()
     
 
     if self.dealer.is_busted():
@@ -124,15 +158,19 @@ class BlackjackGame:
     
   
   def soft_sixteen_check(self):
+    '''
+    Adjusts the dealer's score if they were to be holding onto a soft 17
+    '''
+
     # again with perchance questionable implementation, but i guess I could reuse this code at some point for the cpu thingie thingie 
     # --> *update: ?? I mean when there is an ace present and I need to check to see if there is room to be able to draw another
     # but like should i even or is there som better
     dealer_score = self.dealer.calculate_score()
 
-    if dealer_score >= 17 and self.dealer.aces and self.dealer.is_dealer == True:
+    if dealer_score >= 17 and self.dealer.aces and self.dealer.is_dealer:
         dealer_score -= 10
         self.dealer.aces -= 1
-    self.dealer.score = dealer_score
+        self.dealer.score = dealer_score
   
 
   def check_immediate_win(self):
@@ -140,18 +178,22 @@ class BlackjackGame:
     # prelim natural 21 check :D finally !!!
     if self.dealer.is_natural() and self.player.is_natural():
       print ("\nTie!")
+      self.end_round()
       return True
 
     elif self.dealer.is_natural():
       print( "\nDealer has Blackjack, you lost" )
+      self.end_round()
       return True
     
     elif self.player.is_natural():
       print( "\nPlayer has Blackjack, you won!")
+      self.end_round()
       return True
     
     elif self.player.is_busted():
       print( "\nYou Busted")
+      self.end_round()
       return True
     
     return False
@@ -214,9 +256,10 @@ class BlackjackGame:
     self.deal_initial()
     self.player_turn()
 
-    if not self.player.is_natural():
-      self.dealer_turn()
+    if self.player.is_natural():
+      self.end_round()
 
+    self.dealer_turn()
     self.end_round()
 
 
