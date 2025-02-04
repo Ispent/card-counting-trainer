@@ -116,7 +116,7 @@ class BlackjackGame:
     print (self.player.display_hand())
 
 
-    # logic behind hitting and standing ---> i guess this is fine??
+    # logic behind hitting and stanifding ---> i guess this is fine??
     while not self.player.is_busted():
       print(self.dealer.display_hand())
     
@@ -159,23 +159,37 @@ class BlackjackGame:
   
   def soft_sixteen_check(self):
     '''
-    Adjusts the dealer's score if they were to be holding onto a soft 17
+    Adjusts the dealer's score if they were to be holding onto a soft 17 (17 with an ace as 11)
+
+    Will subtract 10 points for every ace in the hand, as long as the hand score reamains above 17, and the player object contains dealer flag
     '''
 
     # again with perchance questionable implementation, but i guess I could reuse this code at some point for the cpu thingie thingie 
     # --> *update: ?? I mean when there is an ace present and I need to check to see if there is room to be able to draw another
     # but like should i even or is there som better
+
     dealer_score = self.dealer.calculate_score()
 
-    if dealer_score >= 17 and self.dealer.aces and self.dealer.is_dealer:
+    while dealer_score >= 17 and self.dealer.aces > 0 and self.dealer.is_dealer:
         dealer_score -= 10
         self.dealer.aces -= 1
         self.dealer.score = dealer_score
   
 
   def check_immediate_win(self):
+    '''
+    At certain points in the game, will check for immediate win conditions as a result of an action, instead of the natural end of round
+
+    Checks to see if either player object's score is exactly 21 or higher, and if satisfired will end the game immediately
+
+    returns: 
+      bool: True if immediate win/loss condition is met, false if not
+    '''
+
     # i shoud write this
     # prelim natural 21 check :D finally !!!
+    # where tf do i calculate scores
+      # i should have started writing these comments earlier
     if self.dealer.is_natural() and self.player.is_natural():
       print ("\nTie!")
       self.end_round()
