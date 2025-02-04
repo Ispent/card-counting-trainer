@@ -1,27 +1,28 @@
+'''
+patty lee
+blackjack game
+'''
+
+'''
+!!! i have no idea why right now but something kinda broke when I busted and the dealer's turn went anyways so reminder to fix !!!
+wait this might be more broken than i had realized
+'''
+
+
+import os
+import sys
+
+cwd = os.getcwd()
+sub_cwd = os.path.join(cwd, "..")
+sys.path.append(sub_cwd)
+
 from player import Player
 from deck import Deck, Card
-# does da busted/natural object even need to be in player ??? --> should i move it over to here.....
-# if i do..... prolly incorporate both into win condition checking class
-# combine that with a prelimary tie/natural check ???
-
-# at some point i assume im going to have to make more objects for chips/betting i guess....
-
-# maybe i can like simulate an AI type situation for the game as an external player object
-# given a difficulty rating --> take the mathematically "ideal" move and give it a random chance to for the ai to "fumble"?
-# like the cpu will choose to hit anyways on a 18 or som on "accident"
-
-# this project i feel is being blown a lil outta proportion.....
-# man i gotta go back and delete these comments -- reminder*
-
-
-
-# wait am i thinking about this wrong
-# should this be not a game object but a singular "round" object that all goes within the bigger "game" object 
-
 
 
 class BlackjackGame:
   def __init__(self, name='Player'):
+    '''uhhhh''' 
     # initializes with the trash player and the two player objects, does both this class and initialized deck need to be here?
     self.trashPile = Deck()
 
@@ -107,7 +108,7 @@ class BlackjackGame:
 
 
   def dealer_turn(self):
-    # time for u to lose :D
+    '''dealer object will draw cards until their score is a hard 17'''
     print("Dealer's Turn\n")
     print(self.dealer.display_hand(show_all=True))
 
@@ -136,7 +137,6 @@ class BlackjackGame:
 
   def check_immediate_win(self):
     # i shoud write this
-
     # prelim natural 21 check :D finally !!!
     if self.dealer.is_natural() and self.player.is_natural():
       print ("\nTie!")
@@ -157,6 +157,7 @@ class BlackjackGame:
     return False
   
   def final_winner_check(self):
+    '''in the end of a round, will check who the winner is'''
     player_score = self.player.calculate_score()
     dealer_score = self.dealer.calculate_score()
 
@@ -166,9 +167,10 @@ class BlackjackGame:
       print("\nDealer Wins!")
     else:
       print("\ntie!")
-
     
   def end_round(self):
+    '''given the end of the round, will clean the 
+      current hand and add to discard file'''
     self.trashPile.cards.extend(self.player.hand)
     self.trashPile.cards.extend(self.dealer.hand)
 
@@ -193,6 +195,7 @@ class BlackjackGame:
 
 
   def deck_input_check(self):
+    '''ensures the input is in int format'''
     while True:
       try:
         deckCount = int(input("How many decks would you like to use?: "))
