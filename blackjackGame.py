@@ -51,8 +51,11 @@ class BlackjackGame:
     returns:
       deck (Deck): Returns the shuffled deck 
     '''
-    
-    self.deck = Deck()
+    if not hasattr(self, 'deck'):
+        self.deck = Deck()
+    else:
+        self.deck.clear()
+
     self.deck.add_deck(deckCount)
     self.deck.shuffle()
     return self.deck
