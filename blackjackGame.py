@@ -54,7 +54,7 @@ class BlackjackGame:
     if not hasattr(self, 'deck'):
         self.deck = Deck()
     else:
-        self.deck.clear()
+        self.deck.clear_deck()
 
     self.deck.add_deck(deckCount)
     self.deck.shuffle()
@@ -69,11 +69,14 @@ class BlackjackGame:
     # maybe make like a loop so we can just deal 2 cards to every player
     # at some point......
 
-    for card in range(2):
-      self.player.add_card(self.deck.peek())
-      self.deck.cards.pop(0)
-      self.dealer.add_card(self.deck.peek())
-      self.deck.cards.pop(0)
+    if self.player.hand and self.dealer.hand:
+      return
+    else:
+      for card in range(2):
+        self.player.add_card(self.deck.peek())
+        self.deck.cards.pop(0)
+        self.dealer.add_card(self.deck.peek())
+        self.deck.cards.pop(0)
 
   def deal(self, recepient):
     # again the name is like super boring and potentially even redundant but like ugh
