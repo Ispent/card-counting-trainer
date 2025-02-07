@@ -42,13 +42,13 @@ class Player:
   def display_hand(self, show_all=False):
     # display the current hand, if you are a dealer and show_false is flagged as false, only show the first card --> else just show all
     if not show_all and self.is_dealer:
-      return f"Dealer's hand is a {self.hand[0]} and [Hidden Card]"
+      return f"{self.hand[0]} and [Hidden Card]"
     
     if len(self.hand) > 1:
         hand_str = ', '.join(str(card) for card in self.hand[:-1]) + f", and {self.hand[-1]}"
     else:
         hand_str = str(self.hand[0])
-    return f"{self.name}'s hand is a {hand_str}"
+    return f"{hand_str}"
 
   def reset_hand(self):
     # reset's player hand to nothin

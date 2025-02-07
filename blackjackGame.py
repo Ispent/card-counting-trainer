@@ -103,6 +103,7 @@ class BlackjackGame:
     recepient.add_card(card)
     self.deck.cards.pop(0)
 
+
   def player_turn(self): 
     '''
     manages the flow of the player's turn in a round
