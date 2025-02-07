@@ -6,6 +6,12 @@ from blackjackGame import BlackjackGame
 
 class TestDeck:
 
+  """
+  this is so seriously our of date with what im currently doing right now
+  i will come back to write these tests up but i feel i should be doing it as i code but ahuahgaeugaeigjnaieg
+  besides that i dont even think i have pytest properly installed anymore after i deleted a bunch of stuff to "clean up" (AHHHHH)
+  """
+
   def test_addToDeck(self):
     # tests adding card object to deck
     deck = Deck()
