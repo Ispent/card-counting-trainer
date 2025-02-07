@@ -231,14 +231,19 @@ class BlackjackGame:
     else:
       print("\ntie!")
     
+  def reset(self):
+    self.player.hand.clear()
+    self.dealer.hand.clear()
+    self.player.score = 0
+    self.player.score = 0 
+
   def end_round(self):
     '''given the end of the round, will clean the 
       current hand and add to discard file'''
     self.trashPile.cards.extend(self.player.hand)
     self.trashPile.cards.extend(self.dealer.hand)
 
-    self.player.hand.clear()
-    self.dealer.hand.clear()
+    self.reset()
 
     while True:
       replay = input("Would you like to play again? (y/n): ")
