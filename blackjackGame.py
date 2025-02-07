@@ -35,6 +35,7 @@ class BlackjackGame:
     self.player = Player(name)
     self.dealer = Player("Dealer", is_dealer=True)
 
+
   def __len__ (self):
     # length
     return len(self.deck)
@@ -231,11 +232,6 @@ class BlackjackGame:
     else:
       print("\ntie!")
     
-  def reset(self):
-    self.player.hand.clear()
-    self.dealer.hand.clear()
-    self.player.score = 0
-    self.player.score = 0 
 
   def end_round(self):
     '''given the end of the round, will clean the 
@@ -245,21 +241,12 @@ class BlackjackGame:
 
     self.reset()
 
-    while True:
-      replay = input("Would you like to play again? (y/n): ")
+  def reset(self):
+    self.player.hand.clear()
+    self.dealer.hand.clear()
+    self.player.score = 0
+    self.player.score = 0 
 
-      if replay == 'y':
-        self.deal_initial()
-        self.player_turn()
-        if not self.player.is_natural():
-          self.dealer_turn()
-
-      
-      elif replay == "n":
-        exit()
-
-      else:
-        print("Invalid input please try again")
 
 
   def deck_input_check(self):
